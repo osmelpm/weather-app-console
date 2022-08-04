@@ -4,11 +4,17 @@ const {
   pausa,
   paisesSeleccion,
 } = require('./helpers/inquirer')
+const { writeDB, readDB } = require('./helpers/readWriteDB')
 const Busquedas = require('./models/Busquedas')
 
 const main = async () => {
   let opt
   const busquedas = new Busquedas()
+  const db = readDB()
+
+  if (db) {
+    busquedas.history = db
+  }
 
   do {
     opt = await inquirerMenu()
@@ -21,6 +27,12 @@ const main = async () => {
         const lugares = await busquedas.buscar(lugar)
         //Seleccionar lugar
         const seleccion = await paisesSeleccion(lugares)
+
+        if (seleccion === '0') continue
+
+        //Crear historial
+        const place = lugares.find((lugar) => lugar.id === seleccion)
+        busquedas.saveHistory(place.nombre)
 
         const { nombre, lat, lon } = lugares.find(
           (lugar) => (lugar.id = seleccion),
@@ -42,7 +54,12 @@ const main = async () => {
         break
 
       case 2:
-        console.log('mostar historia')
+        //Mostrar historial
+        let count = 0
+        busquedas.history.forEach((search) => {
+          const idx = `${++count}`.green
+          console.log(`${idx}. ${search}`)
+        })
         break
     }
 

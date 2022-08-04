@@ -1,5 +1,6 @@
 require('dotenv').config()
 const { default: axios } = require('axios')
+const { writeDB } = require('../helpers/readWriteDB')
 
 class Busquedas {
   constructor() {
@@ -61,6 +62,14 @@ class Busquedas {
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async saveHistory(lugar) {
+    if (!this.history.includes(lugar)) {
+      this.history.unshift(lugar)
+      this.history = this.history.splice(0, 5)
+      writeDB(this.history)
     }
   }
 }
