@@ -66,13 +66,13 @@ const leerInput = async (message) => {
   return input
 } //ya
 
-const paisesSeleccion = async (paises) => {
-  const choices = paises.map((pais, i) => {
+const paisesSeleccion = async (lugares) => {
+  const choices = lugares.map((lugar, i) => {
     const idx = `${i + 1}.`.green
 
     return {
-      value: pais.place_id,
-      name: `${idx} ${pais.display_name}`,
+      value: lugar.id,
+      name: `${idx} ${lugar.nombre}`,
     }
   })
 

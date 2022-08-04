@@ -15,29 +15,30 @@ const main = async () => {
 
     switch (opt) {
       case 1:
+        //Mostrar mensaje
         const lugar = await leerInput('Lugar: ')
-        console.clear()
-
+        //Buscar los lugares
         const lugares = await busquedas.buscar(lugar)
-
+        //Seleccionar lugar
         const seleccion = await paisesSeleccion(lugares)
 
-        const { display_name, lat, lon } = lugares.find(
-          (lugar) => (lugar.place_id = seleccion),
+        const { nombre, lat, lon } = lugares.find(
+          (lugar) => (lugar.id = seleccion),
         )
-
         //Clima
+        const { temp, tmin, tmax, weather } = await busquedas.clima(lat, lon)
 
         //Mostrar resultados
 
+        console.clear()
         console.log('\nInformación de la ciudad\n'.green)
-        console.log(`Lugar: ${`${display_name}`.green}`)
-        console.log(`Lat: ${`${lat}`.yellow}`)
-        console.log(`Lng: ${`${lon}`.yellow}`)
-        // console.log('Temperatura: ')
-        // console.log('Mínima: ')
-        // console.log('Máxima: ')
-        // console.log('Cómo está el clima: ')
+        console.log('Lugar:', nombre.green)
+        console.log('Lat:', lat.yellow)
+        console.log('Lng:', lon.yellow)
+        console.log('Temperatura:', temp)
+        console.log('Mínima:', tmin)
+        console.log('Máxima:', tmax)
+        console.log('Cómo está el clima:', weather.green)
         break
 
       case 2:
